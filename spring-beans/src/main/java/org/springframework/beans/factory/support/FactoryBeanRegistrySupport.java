@@ -113,6 +113,8 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 							}
 							beforeSingletonCreation(beanName);
 							try {
+								// 第一次调用getBean成功会触发 BeanPostProcessors
+								// 处理初始化成功的钩子
 								object = postProcessObjectFromFactoryBean(object, beanName);
 							}
 							catch (Throwable ex) {

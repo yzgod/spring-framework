@@ -77,12 +77,20 @@ class ApplicationContextAwareProcessor implements BeanPostProcessor {
 
 	@Override
 	@Nullable
+	// 实例化之前
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		if (!(bean instanceof EnvironmentAware || bean instanceof EmbeddedValueResolverAware ||
 				bean instanceof ResourceLoaderAware || bean instanceof ApplicationEventPublisherAware ||
 				bean instanceof MessageSourceAware || bean instanceof ApplicationContextAware)){
 			return bean;
 		}
+		// 如果bean是以下类型 实例化之前,先触发他们的接口方法
+		// 1.EnvironmentAware	环境感知接口
+		// 2.EmbeddedValueResolverAware 嵌入式的value解析器
+		// 3.ResourceLoaderAware	资源加载器
+		// 4.ApplicationEventPublisherAware	事件发布器
+		// 5.MessageSourceAware	MessageSource加载器,国际化
+		// 6.ApplicationContextAware ApplicationContext感知器用于获取容器服务
 
 		AccessControlContext acc = null;
 
@@ -97,6 +105,7 @@ class ApplicationContextAwareProcessor implements BeanPostProcessor {
 			}, acc);
 		}
 		else {
+			// 调用接口
 			invokeAwareInterfaces(bean);
 		}
 
@@ -105,21 +114,27 @@ class ApplicationContextAwareProcessor implements BeanPostProcessor {
 
 	private void invokeAwareInterfaces(Object bean) {
 		if (bean instanceof EnvironmentAware) {
+			//设置上下文环境
 			((EnvironmentAware) bean).setEnvironment(this.applicationContext.getEnvironment());
 		}
 		if (bean instanceof EmbeddedValueResolverAware) {
+			//设置value解析器
 			((EmbeddedValueResolverAware) bean).setEmbeddedValueResolver(this.embeddedValueResolver);
 		}
 		if (bean instanceof ResourceLoaderAware) {
+			//设置resourceLoader
 			((ResourceLoaderAware) bean).setResourceLoader(this.applicationContext);
 		}
 		if (bean instanceof ApplicationEventPublisherAware) {
+			//设置事件发布器
 			((ApplicationEventPublisherAware) bean).setApplicationEventPublisher(this.applicationContext);
 		}
 		if (bean instanceof MessageSourceAware) {
+			//设置MessageSource国际化
 			((MessageSourceAware) bean).setMessageSource(this.applicationContext);
 		}
 		if (bean instanceof ApplicationContextAware) {
+			//获取ApplicationContext
 			((ApplicationContextAware) bean).setApplicationContext(this.applicationContext);
 		}
 	}

@@ -3,6 +3,7 @@ package com.yz.context.beans;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,12 +17,13 @@ import org.springframework.stereotype.Component;
  *		来控制BeanFactoryPostProcessor的执行次序。
  * </br>
  **/
+@Order(1)
 @Component
 public class MyBeanFactoryPostProcessor implements BeanFactoryPostProcessor{
 
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-		System.out.println("MyBeanFactoryPostProcessor...");
+		System.out.println("MyBeanFactoryPostProcessor: postProcessBeanFactory");
 	}
 
 }
