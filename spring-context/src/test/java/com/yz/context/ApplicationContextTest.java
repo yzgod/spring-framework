@@ -13,12 +13,12 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackages = {"com.yz.context.beans"})
 public class ApplicationContextTest {
 
-	public static void main(String[] args){
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+	public static void main(String[] args)  {
+		AnnotationConfigApplicationContext context =
+				new AnnotationConfigApplicationContext();
 		context.register(ApplicationContextTest.class);
 		context.refresh();
-
-		System.out.println(context.getBeanDefinitionCount());
-
+		// 触发lifecycle的stop
+		context.stop();
 	}
 }

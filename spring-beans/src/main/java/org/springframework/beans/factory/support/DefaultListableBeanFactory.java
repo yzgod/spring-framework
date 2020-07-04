@@ -913,6 +913,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		if (beanDefinition instanceof AbstractBeanDefinition) {
 			try {
+				// 校验
 				((AbstractBeanDefinition) beanDefinition).validate();
 			}
 			catch (BeanDefinitionValidationException ex) {
@@ -921,7 +922,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 		}
 
+		// 缓存获取
 		BeanDefinition existingDefinition = this.beanDefinitionMap.get(beanName);
+		// 存在
 		if (existingDefinition != null) {
 			if (!isAllowBeanDefinitionOverriding()) {
 				throw new BeanDefinitionOverrideException(beanName, beanDefinition, existingDefinition);
@@ -948,9 +951,12 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 							"] with [" + beanDefinition + "]");
 				}
 			}
+			// 替换
 			this.beanDefinitionMap.put(beanName, beanDefinition);
 		}
+		//不存在
 		else {
+			//检查bean的创建开启状态
 			if (hasBeanCreationStarted()) {
 				// Cannot modify startup-time collection elements anymore (for stable iteration)
 				synchronized (this.beanDefinitionMap) {
@@ -972,6 +978,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 
 		if (existingDefinition != null || containsSingleton(beanName)) {
+			// 重置缓存
 			resetBeanDefinition(beanName);
 		}
 	}

@@ -161,7 +161,7 @@ class ConfigurationClassParser {
 		this.conditionEvaluator = new ConditionEvaluator(registry, environment, resourceLoader);
 	}
 
-
+	// 解析@Configuration
 	public void parse(Set<BeanDefinitionHolder> configCandidates) {
 		for (BeanDefinitionHolder holder : configCandidates) {
 			BeanDefinition bd = holder.getBeanDefinition();
@@ -216,7 +216,7 @@ class ConfigurationClassParser {
 		return this.configurationClasses.keySet();
 	}
 
-
+	//执行解析
 	protected void processConfigurationClass(ConfigurationClass configClass) throws IOException {
 		if (this.conditionEvaluator.shouldSkip(configClass.getMetadata(), ConfigurationPhase.PARSE_CONFIGURATION)) {
 			return;
@@ -279,7 +279,7 @@ class ConfigurationClassParser {
 			}
 		}
 
-		// Process any @ComponentScan annotations
+		// Process any @ComponentScan annotations 解析扫描注解
 		Set<AnnotationAttributes> componentScans = AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), ComponentScans.class, ComponentScan.class);
 		if (!componentScans.isEmpty() &&
@@ -301,10 +301,10 @@ class ConfigurationClassParser {
 			}
 		}
 
-		// Process any @Import annotations
+		// Process any @Import annotations  解析import
 		processImports(configClass, sourceClass, getImports(sourceClass), true);
 
-		// Process any @ImportResource annotations
+		// Process any @ImportResource annotations  解析ImportResource
 		AnnotationAttributes importResource =
 				AnnotationConfigUtils.attributesFor(sourceClass.getMetadata(), ImportResource.class);
 		if (importResource != null) {
@@ -316,7 +316,7 @@ class ConfigurationClassParser {
 			}
 		}
 
-		// Process individual @Bean methods
+		// Process individual @Bean methods  解析Bean
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
 			configClass.addBeanMethod(new BeanMethod(methodMetadata, configClass));
